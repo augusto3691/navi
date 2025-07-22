@@ -7,6 +7,7 @@ function createWindow() {
   if (win) return;
 
   win = new BrowserWindow({
+    darkTheme: true,
     width: 400,
     height: 500,
     show: false, // inicia oculta
@@ -43,6 +44,8 @@ function createWindow() {
     win = null;
   });
 }
+
+
 
 app.whenReady().then(() => {
   // Registra atalho global

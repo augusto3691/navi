@@ -4,18 +4,11 @@ import { ThemeProvider } from "./components/theme-provider";
 import { Separator } from "./components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 import { Textarea } from "./components/ui/textarea";
+import Translate from "./components/tabs/Translate";
 
 function App() {
-  const translatorRef = useRef<HTMLTextAreaElement>(null);
+  
   const aiRef = useRef<HTMLTextAreaElement>(null);
-
-  // Optionally, you can focus the textarea when the tab is selected.
-  // For simplicity, here's how to set autofocus on mount for the first tab:
-  // If you want to autofocus when switching tabs, you can use state and effects.
-
-  if (translatorRef.current) {
-    translatorRef.current.focus();
-  }
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -33,12 +26,7 @@ function App() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="translator">
-              <Textarea
-                ref={translatorRef}
-                autoFocus
-                placeholder="Qual a sua dúvida na tradução?"
-                className="w-full h-40 resize-none"
-              />
+              <Translate />
             </TabsContent>
             <TabsContent value="ai">
               <Textarea
