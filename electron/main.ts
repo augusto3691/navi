@@ -21,11 +21,13 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: true,
     },
   });
 
   win.loadURL("http://localhost:5173");
+
+  // win.webContents.openDevTools({ mode: "detach" });
 
   // Fecha a janela logicamente (não destrói) com ESC
   win.webContents.on("before-input-event", (_, input) => {
@@ -45,7 +47,13 @@ function createWindow() {
   });
 }
 
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+});
 
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection:", reason);
+});
 
 app.whenReady().then(() => {
   // Registra atalho global
