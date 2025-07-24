@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import { translate } from "@vitalets/google-translate-api";
 import { ChatAnthropic } from "@langchain/anthropic";
 import dotenv from "dotenv";
 
@@ -15,23 +14,6 @@ const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || "";
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.get("/translate", async (req, res) => {
-  const { text, targetLanguage } = req.query;
-  if (!text || !targetLanguage) {
-    return res.status(400).json({
-      error: "Texto e idioma de destino são obrigatórios.",
-    });
-  }
-
-  try {
-    const translation = await translate(text, { to: targetLanguage });
-    return res.json({ translation });
-  } catch (error) {
-    console.error("Erro ao traduzir:", error);
-    return res.status(500).json({ error: "Erro ao traduzir o texto." });
-  }
-});
 
 app.post("/empathical", async (req, res) => {
   const { message } = req.body;
@@ -79,6 +61,33 @@ app.post("/technical", async (req, res) => {
     [
       "human",
       `Me ajude com a melhorar essa mensagem para uma forma bem mais técnica. Responda apenas com a frase final traduzida: ${message}`,
+    ],
+  ]);
+
+  return res.json({
+    text: aiMsg.content,
+  });
+});
+
+app.post("/summary", async (req, res) => {
+  const { message } = req.body;
+
+  const llm = new ChatAnthropic({
+    anthropicApiKey: ANTHROPIC_API_KEY,
+    model: "claude-4-sonnet-20250514",
+    temperature: 0.5,
+    maxTokens: 1000,
+    maxRetries: 2,
+  });
+
+  const aiMsg = await llm.invoke([
+    [
+      "system",
+      "Você é um assistente de IA que ajuda a entender o contexto e sobre o que a pessoa esta falando, tentando explicar de forma mais clara, objetiva e técnica.",
+    ],
+    [
+      "human",
+      `Me ajude a entender o que essa pessoa quis dizer, responda para mim em português: ${message}`,
     ],
   ]);
 

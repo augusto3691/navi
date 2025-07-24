@@ -1,5 +1,6 @@
 import { Flash } from "./components/Flash";
 import Empathical from "./components/tabs/Empathical";
+import Summary from "./components/tabs/Summary";
 import Technical from "./components/tabs/Technical";
 import { ThemeProvider } from "./components/theme-provider";
 import { Separator } from "./components/ui/separator";
@@ -20,12 +21,16 @@ function App() {
             <TabsList>
               <TabsTrigger value="empathic">Empathic</TabsTrigger>
               <TabsTrigger value="technical">Technical</TabsTrigger>
+              <TabsTrigger value="summary">Summary</TabsTrigger>
             </TabsList>
             <TabsContent value="empathic">
               <Empathical />
             </TabsContent>
             <TabsContent value="technical">
               <Technical />
+            </TabsContent>
+            <TabsContent value="summary">
+              <Summary />
             </TabsContent>
           </Tabs>
         </div>
